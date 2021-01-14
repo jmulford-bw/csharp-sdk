@@ -35,10 +35,10 @@ namespace Bandwidth.Standard.Voice.Controllers
         /// </summary>
         /// <param name="accountId">Required parameter: Example: </param>
         /// <param name="body">Optional parameter: Example: </param>
-        /// <return>Returns the ApiResponse<Models.ApiCallResponse> response from the API call</return>
-        public ApiResponse<Models.ApiCallResponse> CreateCall(string accountId, Models.ApiCreateCallRequest body = null)
+        /// <return>Returns the ApiResponse<Models.ApiCallResponseNameChangeTest> response from the API call</return>
+        public ApiResponse<Models.ApiCallResponseNameChangeTest> CreateCall(string accountId, Models.ApiCreateCallRequest body = null)
         {
-            Task<ApiResponse<Models.ApiCallResponse>> t = CreateCallAsync(accountId, body);
+            Task<ApiResponse<Models.ApiCallResponseNameChangeTest>> t = CreateCallAsync(accountId, body);
             ApiHelper.RunTaskSynchronously(t);
             return t.Result;
         }
@@ -48,8 +48,8 @@ namespace Bandwidth.Standard.Voice.Controllers
         /// </summary>
         /// <param name="accountId">Required parameter: Example: </param>
         /// <param name="body">Optional parameter: Example: </param>
-        /// <return>Returns the ApiResponse<Models.ApiCallResponse> response from the API call</return>
-        public async Task<ApiResponse<Models.ApiCallResponse>> CreateCallAsync(string accountId, Models.ApiCreateCallRequest body = null, CancellationToken cancellationToken = default)
+        /// <return>Returns the ApiResponse<Models.ApiCallResponseNameChangeTest> response from the API call</return>
+        public async Task<ApiResponse<Models.ApiCallResponseNameChangeTest>> CreateCallAsync(string accountId, Models.ApiCreateCallRequest body = null, CancellationToken cancellationToken = default)
         {
             //the base uri for api requests
             string _baseUri = config.GetBaseUri(Server.VoiceDefault);
@@ -123,8 +123,8 @@ namespace Bandwidth.Standard.Voice.Controllers
             //handle errors defined at the API level
             base.ValidateResponse(_response, _context);
 
-            var _result = ApiHelper.JsonDeserialize<Models.ApiCallResponse>(_response.Body);
-            ApiResponse<Models.ApiCallResponse> apiResponse = new ApiResponse<Models.ApiCallResponse>(_response.StatusCode, _response.Headers, _result);
+            var _result = ApiHelper.JsonDeserialize<Models.ApiCallResponseNameChangeTest>(_response.Body);
+            ApiResponse<Models.ApiCallResponseNameChangeTest> apiResponse = new ApiResponse<Models.ApiCallResponseNameChangeTest>(_response.StatusCode, _response.Headers, _result);
             return apiResponse;
         }
 

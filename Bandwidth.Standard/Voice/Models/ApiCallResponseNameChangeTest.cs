@@ -17,11 +17,11 @@ using Bandwidth.Standard.Utilities;
 
 namespace Bandwidth.Standard.Voice.Models
 {
-    public class ApiCallResponse 
+    public class ApiCallResponseNameChangeTest 
     {
-        public ApiCallResponse() { }
+        public ApiCallResponseNameChangeTest() { }
 
-        public ApiCallResponse(string accountId,
+        public ApiCallResponseNameChangeTest(string accountId,
             string callId,
             string applicationId,
             string to,
