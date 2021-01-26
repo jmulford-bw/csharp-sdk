@@ -405,6 +405,150 @@ namespace Bandwidth.Standard.Messaging.Controllers
         }
 
         /// <summary>
+        /// getMessages
+        /// </summary>
+        /// <param name="accountId">Required parameter: Example: </param>
+        /// <param name="userId">Required parameter: Example: </param>
+        /// <param name="messageId">Optional parameter: Example: </param>
+        /// <param name="sourceTn">Optional parameter: Example: </param>
+        /// <param name="destinationTn">Optional parameter: Example: </param>
+        /// <param name="messageStatus">Optional parameter: Example: </param>
+        /// <param name="errorCode">Optional parameter: Example: </param>
+        /// <param name="fromDateTime">Optional parameter: Example: </param>
+        /// <param name="toDateTime">Optional parameter: Example: </param>
+        /// <param name="pageToken">Optional parameter: Example: </param>
+        /// <param name="limit">Optional parameter: Example: </param>
+        /// <return>Returns the ApiResponse<Models.BandwidthMessagesList> response from the API call</return>
+        public ApiResponse<Models.BandwidthMessagesList> GetMessages(
+                string accountId,
+                string userId,
+                string messageId = null,
+                string sourceTn = null,
+                string destinationTn = null,
+                string messageStatus = null,
+                int? errorCode = null,
+                string fromDateTime = null,
+                string toDateTime = null,
+                string pageToken = null,
+                int? limit = null)
+        {
+            Task<ApiResponse<Models.BandwidthMessagesList>> t = GetMessagesAsync(accountId, userId, messageId, sourceTn, destinationTn, messageStatus, errorCode, fromDateTime, toDateTime, pageToken, limit);
+            ApiHelper.RunTaskSynchronously(t);
+            return t.Result;
+        }
+
+        /// <summary>
+        /// getMessages
+        /// </summary>
+        /// <param name="accountId">Required parameter: Example: </param>
+        /// <param name="userId">Required parameter: Example: </param>
+        /// <param name="messageId">Optional parameter: Example: </param>
+        /// <param name="sourceTn">Optional parameter: Example: </param>
+        /// <param name="destinationTn">Optional parameter: Example: </param>
+        /// <param name="messageStatus">Optional parameter: Example: </param>
+        /// <param name="errorCode">Optional parameter: Example: </param>
+        /// <param name="fromDateTime">Optional parameter: Example: </param>
+        /// <param name="toDateTime">Optional parameter: Example: </param>
+        /// <param name="pageToken">Optional parameter: Example: </param>
+        /// <param name="limit">Optional parameter: Example: </param>
+        /// <return>Returns the ApiResponse<Models.BandwidthMessagesList> response from the API call</return>
+        public async Task<ApiResponse<Models.BandwidthMessagesList>> GetMessagesAsync(
+                string accountId,
+                string userId,
+                string messageId = null,
+                string sourceTn = null,
+                string destinationTn = null,
+                string messageStatus = null,
+                int? errorCode = null,
+                string fromDateTime = null,
+                string toDateTime = null,
+                string pageToken = null,
+                int? limit = null, CancellationToken cancellationToken = default)
+        {
+            //the base uri for api requests
+            string _baseUri = config.GetBaseUri(Server.MessagingDefault);
+
+            //prepare query string for API call
+            StringBuilder _queryBuilder = new StringBuilder(_baseUri);
+            _queryBuilder.Append("/users/{userId}/messages");
+
+            //process optional template parameters
+            ApiHelper.AppendUrlWithTemplateParameters(_queryBuilder, new Dictionary<string, object>()
+            {
+                { "accountId", accountId },
+                { "userId", userId }
+            });
+
+            //prepare specfied query parameters
+            var _queryParameters = new Dictionary<string, object>()
+            {
+                { "messageId", messageId },
+                { "sourceTn", sourceTn },
+                { "destinationTn", destinationTn },
+                { "messageStatus", messageStatus },
+                { "errorCode", errorCode },
+                { "fromDateTime", fromDateTime },
+                { "toDateTime", toDateTime },
+                { "pageToken", pageToken },
+                { "limit", limit }
+            };
+
+            //append request with appropriate headers and parameters
+            var _headers = new Dictionary<string, string>()
+            {
+                { "user-agent", userAgent },
+                { "accept", "application/json" }
+            };
+
+            //prepare the API call request to fetch the response
+            HttpRequest _request = GetClientInstance().Get(_queryBuilder.ToString(), _headers, queryParameters: _queryParameters);
+
+            _request = await authManagers["messaging"].ApplyAsync(_request).ConfigureAwait(false);
+
+            //invoke request and get response
+            HttpStringResponse _response = await GetClientInstance().ExecuteAsStringAsync(_request, cancellationToken).ConfigureAwait(false);
+            HttpContext _context = new HttpContext(_request, _response);
+
+            //Error handling using HTTP status codes
+            if (_response.StatusCode == 400)
+            {
+                throw new MessagingException("400 Request is malformed or invalid", _context);
+            }
+
+            if (_response.StatusCode == 401)
+            {
+                throw new MessagingException("401 The specified user does not have access to the account", _context);
+            }
+
+            if (_response.StatusCode == 403)
+            {
+                throw new MessagingException("403 The user does not have access to this API", _context);
+            }
+
+            if (_response.StatusCode == 404)
+            {
+                throw new MessagingException("404 Path not found", _context);
+            }
+
+            if (_response.StatusCode == 415)
+            {
+                throw new MessagingException("415 The content-type of the request is incorrect", _context);
+            }
+
+            if (_response.StatusCode == 429)
+            {
+                throw new MessagingException("429 The rate limit has been reached", _context);
+            }
+
+            //handle errors defined at the API level
+            base.ValidateResponse(_response, _context);
+
+            var _result = ApiHelper.JsonDeserialize<Models.BandwidthMessagesList>(_response.Body);
+            ApiResponse<Models.BandwidthMessagesList> apiResponse = new ApiResponse<Models.BandwidthMessagesList>(_response.StatusCode, _response.Headers, _result);
+            return apiResponse;
+        }
+
+        /// <summary>
         /// createMessage
         /// </summary>
         /// <param name="userId">Required parameter: Example: </param>
